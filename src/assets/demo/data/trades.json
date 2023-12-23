@@ -1,0 +1,72 @@
+[
+    {
+        "slno": 1,
+        "tradeName": "CIVIL HELPER",
+        "rate": 14.49
+    },
+    {
+        "slno": 2,
+        "tradeName": "MEP HELPER",
+        "rate": 15.21
+    },
+    {
+        "slno": 3,
+        "tradeName": "STEEL FIXER",
+        "rate": 20.98
+    },
+    {
+        "slno": 4,
+        "tradeName": "CARPENTER",
+        "rate": 19.51
+    },
+    {
+        "slno": 5,
+        "tradeName": "MASON",
+        "rate": 12.35
+    },
+    {
+        "slno": 6,
+        "tradeName": "SCAFFOLDER",
+        "rate": 24.07
+    },
+    {
+        "slno": 7,
+        "tradeName": "GENERAL PAINTER",
+        "rate": 16.61
+    },
+    {
+        "slno": 8,
+        "tradeName": "CHARGEHAND ( ALL CIVIL TRADE )",
+        "rate": 9.23
+    },
+    {
+        "slno": 9,
+        "tradeName": "ELECTRICIAN",
+        "rate": 23.46
+    },
+    {
+        "slno": 10,
+        "tradeName": "PLUMBER",
+        "rate": 18.85
+    },
+    {
+        "slno": 11,
+        "tradeName": "SPRAY PAINTER",
+        "rate": 9.86
+    },
+    {
+        "slno": 12,
+        "tradeName": "DUCT MAN",
+        "rate": 14.77
+    },
+    {
+        "slno": 13,
+        "tradeName": "CHARGEHAND ALL MEP TRADE",
+        "rate": 18.51
+    },
+    {
+        "slno": 14,
+        "tradeName": "FOREMEN",
+        "rate": 11.43
+    }
+]

@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "name": "Pharmacon",
+        "address": "803 Debevoise Avenue, Sexton, Minnesota, 8245",
+        "phone": "(04) 804 4132"
+    },
+    {
+        "id": 2,
+        "name": "Zipak",
+        "address": "710 Vine Street, Garnet, South Dakota, 6206",
+        "phone": "(04) 871 4212"
+    },
+    {
+        "id": 3,
+        "name": "Codact",
+        "address": "775 Morgan Avenue, Robinette, California, 6590",
+        "phone": "(04) 884 5882"
+    },
+    {
+        "id": 4,
+        "name": "Repetwire",
+        "address": "814 Milford Street, Beyerville, Missouri, 2621",
+        "phone": "(04) 841 5522"
+    },
+    {
+        "id": 5,
+        "name": "Magnemo",
+        "address": "820 Perry Place, Hiwasse, Palau, 5017",
+        "phone": "(04) 999 5222"
+    },
+    {
+        "id": 6,
+        "name": "Zillatide",
+        "address": "144 Amboy Street, Genoa, Indiana, 842",
+        "phone": "(04) 969 5822"
+    },
+    {
+        "id": 7,
+        "name": "Grainspot",
+        "address": "757 Ryerson Street, Helen, Virginia, 1904",
+        "phone": "(04) 893 4463"
+    },
+    {
+        "id": 8,
+        "name": "Orbean",
+        "address": "231 Crawford Avenue, Tuttle, American Samoa, 138",
+        "phone": "(04) 856 5573"
+    },
+    {
+        "id": 9,
+        "name": "Intrawear",
+        "address": "221 Canarsie Road, Bowie, Montana, 7064",
+        "phone": "(04) 827 5092"
+    },
+    {
+        "id": 10,
+        "name": "Ovation",
+        "address": "262 Hanover Place, Foxworth, Marshall Islands, 3935",
+        "phone": "(04) 861 4842"
+    },
+    {
+        "id": 11,
+        "name": "Centice",
+        "address": "263 Coffey Street, Rivers, Georgia, 9489",
+        "phone": "(04) 861 5643"
+    },
+    {
+        "id": 12,
+        "name": "Anarco",
+        "address": "275 Dover Street, Kempton, Illinois, 7551",
+        "phone": "(04) 851 4272"
+    }
+]

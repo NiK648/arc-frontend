@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "name": "Kozgene",
+        "phone": "(04) 864 4053",
+        "address": "713 Hampton Avenue, Yorklyn, Florida, 2973"
+    },
+    {
+        "id": 2,
+        "name": "Omatom",
+        "phone": "(04) 842 4993",
+        "address": "258 Keen Court, Retsof, Virgin Islands, 2454"
+    },
+    {
+        "id": 3,
+        "name": "Dognost",
+        "phone": "(04) 907 4383",
+        "address": "460 Stoddard Place, Emerald, Arizona, 3510"
+    },
+    {
+        "id": 4,
+        "name": "Musanpoly",
+        "phone": "(04) 849 5643",
+        "address": "374 Applegate Court, Wauhillau, Hawaii, 6297"
+    },
+    {
+        "id": 5,
+        "name": "Mixers",
+        "phone": "(04) 848 4952",
+        "address": "764 Ide Court, Grimsley, Georgia, 1193"
+    },
+    {
+        "id": 6,
+        "name": "Acium",
+        "phone": "(04) 988 5222",
+        "address": "305 Abbey Court, Boling, Massachusetts, 8502"
+    },
+    {
+        "id": 7,
+        "name": "Gynk",
+        "phone": "(04) 850 4743",
+        "address": "656 Butler Place, Harrodsburg, Utah, 3097"
+    },
+    {
+        "id": 8,
+        "name": "Techade",
+        "phone": "(04) 938 5662",
+        "address": "654 Doughty Street, Connerton, Colorado, 7906"
+    },
+    {
+        "id": 9,
+        "name": "Nebulean",
+        "phone": "(04) 974 5492",
+        "address": "517 Fanchon Place, Spokane, Oregon, 3538"
+    },
+    {
+        "id": 10,
+        "name": "Sultrax",
+        "phone": "(04) 948 5562",
+        "address": "546 Rogers Avenue, Marysville, New Hampshire, 2032"
+    },
+    {
+        "id": 11,
+        "name": "Zenthall",
+        "phone": "(04) 969 4062",
+        "address": "671 Truxton Street, Waikele, District Of Columbia, 1229"
+    },
+    {
+        "id": 12,
+        "name": "Steelfab",
+        "phone": "(04) 885 4512",
+        "address": "500 Bergen Avenue, Boomer, Idaho, 6439"
+    },
+    {
+        "id": 13,
+        "name": "Xurban",
+        "phone": "(04) 843 5803",
+        "address": "832 Monaco Place, Bakersville, American Samoa, 112"
+    },
+    {
+        "id": 14,
+        "name": "Comtrail",
+        "phone": "(04) 837 5483",
+        "address": "966 Hillel Place, Croom, Nebraska, 7759"
+    },
+    {
+        "id": 15,
+        "name": "Talkalot",
+        "phone": "(04) 913 5782",
+        "address": "155 Corbin Place, Independence, Arkansas, 7981"
+    },
+    {
+        "id": 16,
+        "name": "Zerbina",
+        "phone": "(04) 988 5182",
+        "address": "141 Goodwin Place, Kennedyville, North Carolina, 4190"
+    },
+    {
+        "id": 17,
+        "name": "Deviltoe",
+        "phone": "(04) 892 4473",
+        "address": "931 Herkimer Street, Sussex, Michigan, 506"
+    },
+    {
+        "id": 18,
+        "name": "Veraq",
+        "phone": "(04) 837 4472",
+        "address": "183 Coleman Street, Wacissa, Maine, 7144"
+    },
+    {
+        "id": 19,
+        "name": "Aeora",
+        "phone": "(04) 980 4853",
+        "address": "914 Bartlett Street, Helen, Minnesota, 4808"
+    },
+    {
+        "id": 20,
+        "name": "Exoteric",
+        "phone": "(04) 837 5093",
+        "address": "904 Langham Street, Belmont, Virginia, 3151"
+    }
+]
