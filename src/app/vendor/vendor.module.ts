@@ -18,9 +18,10 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { VendorEmployeesComponent } from './vendor-employees/vendor-employees.component';
 
 @NgModule({
-    declarations: [VendorComponent],
+    declarations: [VendorComponent, VendorEmployeesComponent],
     imports: [
         CommonModule,
         TableModule,

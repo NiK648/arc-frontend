@@ -17,9 +17,10 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { ProjectEmployeesComponent } from './project-employees/project-employees.component';
 
 @NgModule({
-    declarations: [ProjectComponent],
+    declarations: [ProjectComponent, ProjectEmployeesComponent],
     exports: [ProjectComponent],
     imports: [
         CommonModule,
