@@ -12,10 +12,9 @@ import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { TradeService } from './demo/service/trade.service';
-import { AssignedEmployeesComponent } from './assigned-employees/assigned-employees.component';
 
 @NgModule({
-    declarations: [AppComponent, NotfoundComponent, AssignedEmployeesComponent],
+    declarations: [AppComponent, NotfoundComponent],
     imports: [AppRoutingModule, AppLayoutModule],
     providers: [
         CountryService,

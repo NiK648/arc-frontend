@@ -5,6 +5,9 @@ import { Table } from 'primeng/table';
 import { ProjectService } from 'src/app/demo/service/project.service';
 import { ClientService } from '../demo/service/client.service';
 import { Client } from '../demo/api/client';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TimeLogService } from '../demo/service/time-log.service';
+import { TimeLog } from '../demo/api/time-log';
 
 @Component({
     selector: 'app-project',
@@ -35,11 +38,20 @@ export class ProjectComponent implements OnInit {
 
     rowsPerPageOptions = [5, 10, 20];
 
+    logTimeDialog = false;
+
+    timeLogs: TimeLog[] = [];
+
+    pTimeLogs: TimeLog[] = [];
+
     constructor(
         private projectService: ProjectService,
         private clientService: ClientService,
-        private messageService: MessageService
-    ) {}
+        private messageService: MessageService,
+        private timeLogService: TimeLogService,
+        private router: Router,
+        private route: ActivatedRoute,
+    ) { }
 
     ngOnInit() {
         this.clientService.getClients().subscribe((clients) => {
@@ -70,6 +82,10 @@ export class ProjectComponent implements OnInit {
             { label: 'LOWSTOCK', value: 'lowstock' },
             { label: 'OUTOFSTOCK', value: 'outofstock' },
         ];
+
+        this.timeLogService.getTimeLogs().subscribe(data => {
+            this.timeLogs = data;
+        })
     }
 
     openNew() {
@@ -182,5 +198,20 @@ export class ProjectComponent implements OnInit {
             (event.target as HTMLInputElement).value,
             'contains'
         );
+    }
+
+    onSelect(project: Project) {
+        this.router.navigate([project.id, 'employees'], {
+            relativeTo: this.route
+        });
+    }
+
+    openLogTime(project: Project) {
+        this.pTimeLogs = this.timeLogs.filter(t => t.projectId === project.id);
+        this.logTimeDialog = true;
+    }
+
+    saveTimeLog() {
+        this.logTimeDialog = false;
     }
 }

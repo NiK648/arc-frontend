@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card p-3">
             <p-toast></p-toast>
-            <p-toolbar styleClass="mb-4">
+            <!-- <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
@@ -20,16 +20,18 @@
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
                         (click)="dt.exportCSV()"></button>
                 </ng-template>
-            </p-toolbar>
+            </p-toolbar> -->
 
-            <p-table #dt [value]="employees" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+            <p-table #dt [value]="data" [columns]="cols" responsiveLayout="scroll" [rows]="10"
                 [globalFilterFields]="['id', 'name', 'phone', 'address']" [paginator]="true"
                 [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedEmployees" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" selectionMode="none"
+                [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Manage Employees</h5>
+                        <h5 class="m-0">{{title}}</h5>
+                        <button pButton pRipple label="Export" icon="pi pi-file-pdf"
+                            class="p-button-success ml-auto mr-2" (click)="exportPdf()"></button>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
@@ -39,90 +41,72 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="id" style="width: 100px">
-                            Id <p-sortIcon field="id"></p-sortIcon>
+                        <th pSortableColumn="id" style="width: 250px">
+                            Id
+                            <p-sortIcon field="id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="firstName" style="width: 250px">
-                            First Name
+                            Name
                             <p-sortIcon field="firstName"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="lastName" style="width: 250px">
-                            Last Name <p-sortIcon field="lastName"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="email" style="width: 250px">
-                            Email <p-sortIcon field="email"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="phone" style="width: 250px">
-                            Phone <p-sortIcon field="phone"></p-sortIcon>
                         </th>
                         <th pSortableColumn="tradeId" style="width: 250px">
                             Trade <p-sortIcon field="tradeId"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="vendorId" style="width: 250px">
-                            Vendor <p-sortIcon field="vendorId"></p-sortIcon>
-                        </th>
-                        <!-- <th pSortableColumn="projectId" style="width: 250px">
+                        <th pSortableColumn="projectId" style="width: 250px">
                             Project <p-sortIcon field="projectId"></p-sortIcon>
-                        </th> -->
-                        <th style="text-align: right">Action</th>
+                        </th>
+                        <th *ngFor="let item of days">{{item}}</th>
+                        <th pSortableColumn="total" style="width: 250px">
+                            Total Hours <p-sortIcon field="total"></p-sortIcon>
+                        </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-employee>
+                <ng-template pTemplate="body" let-log>
                     <tr>
-                        <td>
+                        <!-- <td>
                             <p-tableCheckbox [value]="employee"></p-tableCheckbox>
-                        </td>
+                        </td> -->
                         <td>
                             <span class="p-column-title">Id</span>
-                            {{ employee.id }}
+                            {{ log.employeeId }}
                         </td>
                         <td>
                             <span class="p-column-title">Name</span>
-                            {{ employee.firstName }}
-                        </td>
-                        <td>
-                            <span class="p-column-title">Name</span>
-                            {{ employee.lastName }}
-                        </td>
-                        <td>
-                            <span class="p-column-title">Email</span>
-                            {{ employee.email }}
-                        </td>
-                        <td>
-                            <span class="p-column-title">Phone</span>
-                            {{ employee.phone }}
+                            {{ log.employeeName }}
                         </td>
                         <td>
                             <span class="p-column-title">Trade</span>
-                            {{ employee.tradeName }}
+                            {{ log.tradeName }}
                         </td>
                         <td>
-                            <span class="p-column-title">Vendor</span>
-                            {{ employee.vendorName }}
+                            <span class="p-column-title">Project</span>
+                            {{ log.projectName }}
+                        </td>
+                        <td *ngFor="let item of days">{{log[item]}}</td>
+                        <td>
+                            <span class="p-column-title">Total Hours</span>
+                            {{ log.total }}h
                         </td>
                         <!-- <td>
                             <span class="p-column-title">Project</span>
                             {{ employee.projectName }}
                         </td> -->
-                        <td>
+                        <!-- <td>
                             <div class="flex justify-content-end">
-                                <!-- <button
+                                <button
                                     pButton
                                     pRipple
                                     icon="pi pi-user-plus"
                                     class="p-button-rounded p-button-success mr-2"
                                     (click)="openLogTime(employee)"
-                                ></button> -->
+                                ></button>
                                 <button pButton pRipple icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
                                     (click)="editEmployee(employee)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
                                     (click)="deleteEmployee(employee)"></button>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 </ng-template>
             </p-table>

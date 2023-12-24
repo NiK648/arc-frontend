@@ -1,56 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MessageService, SelectItem } from 'primeng/api';
-import { Table, TableModule } from 'primeng/table';
-import { EmployeeService } from '../demo/service/employee.service';
-import { Employee, EmployeeType } from '../demo/api/employee';
-import { TradeService } from '../demo/service/trade.service';
-import { VendorService } from '../demo/service/vendor.service';
-import { ProjectService } from '../demo/service/project.service';
-import { firstValueFrom } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
-import { InputMaskModule } from 'primeng/inputmask';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { RatingModule } from 'primeng/rating';
-import { RippleModule } from 'primeng/ripple';
-import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService, SelectItem } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { firstValueFrom } from 'rxjs';
+import { Employee, EmployeeType } from 'src/app/demo/api/employee';
+import { EmployeeService } from 'src/app/demo/service/employee.service';
+import { ProjectService } from 'src/app/demo/service/project.service';
+import { TimeLogService } from 'src/app/demo/service/time-log.service';
+import { TradeService } from 'src/app/demo/service/trade.service';
+import { VendorService } from 'src/app/demo/service/vendor.service';
+import jsPDF from 'jspdf';
+import autoTable, { ColumnInput } from 'jspdf-autotable';
 
 @Component({
-    selector: 'app-assigned-employees',
-    standalone: true,
-    imports: [CommonModule, TableModule,
-        FileUploadModule,
-        FormsModule,
-        ButtonModule,
-        RippleModule,
-        ToastModule,
-        ToolbarModule,
-        RatingModule,
-        InputTextModule,
-        InputTextareaModule,
-        DropdownModule,
-        RadioButtonModule,
-        InputNumberModule,
-        DialogModule,
-        InputMaskModule,
-        CalendarModule,],
-    templateUrl: './assigned-employees.component.html',
-    styleUrls: ['./assigned-employees.component.scss'],
+    selector: 'app-report',
+    templateUrl: './report.component.html',
+    styleUrls: ['./report.component.scss'],
     providers: [MessageService],
 })
-export class AssignedEmployeesComponent implements OnInit {
-    @Input() type: 'project' | 'vendor';
-
+export class ReportComponent {
     employeeDialog: boolean = false;
 
     logTimeDialog: boolean = false;
@@ -84,33 +52,33 @@ export class AssignedEmployeesComponent implements OnInit {
 
     currentDate = new Date();
 
-    public title: string = "";
+    typeOptions: SelectItem[] = [
+        {
+            label: 'Internal',
+            value: EmployeeType.Internal,
+        },
+        {
+            label: 'External',
+            value: EmployeeType.External,
+        },
+    ];
 
-    typeOptions: SelectItem[] = [{
-        label: 'Internal',
-        value: EmployeeType.Internal,
-    }, {
-        label: 'External',
-        value: EmployeeType.External,
-    }];
+    public title: string = '';
 
-    workStatus: SelectItem[] = [{
-        label: 'Present',
-        value: EmployeeType.Internal,
-    }, {
-        label: 'External',
-        value: EmployeeType.External,
-    }];
+    days: number[] = Array.from({ length: 30 }, (value, index) => index + 1);
+
+    data: any[] = [];
 
     constructor(
         private employeeService: EmployeeService,
         private projectService: ProjectService,
         private vendorService: VendorService,
         private tradeService: TradeService,
+        private timeLogService: TimeLogService,
         private messageService: MessageService,
         private router: Router,
-        private route: ActivatedRoute,
-    ) { }
+        private route: ActivatedRoute
+    ) {}
 
     async ngOnInit() {
         this.trades = (await firstValueFrom(this.tradeService.getTrades())).map(
@@ -154,13 +122,30 @@ export class AssignedEmployeesComponent implements OnInit {
         ];
 
         const id = this.route.snapshot.params['id'];
-        if (this.type === 'project') {
-            const project = this.projects.find(p => p.value == id)?.label;
-            this.title = `${project} - Assigned Employees`;
-        } else if (this.type === 'vendor') {
-            const vendor = this.vendors.find(p => p.value == id)?.label;
-            this.title = `${vendor} - Employees`;
-        }
+
+        this.timeLogService.getVendorTimeLogs().subscribe((res) => {
+            this.data = res.find((t) => t.vendorId == id).employees;
+            this.data.forEach((t) => {
+                t.tradeName = this.trades.find(
+                    (tr) => tr.value === t.tradeId
+                )?.label;
+                let sum = 0;
+                t.timeLogs.forEach((log) => {
+                    t[log.logDate] = log.logTime;
+                    sum += Number(
+                        log.logTime ? log.logTime.replace('h', '') : 0
+                    );
+                });
+                t.total = sum;
+                delete t.timeLogs;
+            });
+            this.data.sort((a, b) => {
+                return a.employeeId - b.employeeId;
+            });
+        });
+
+        const vendor = this.vendors.find((p) => p.value == id)?.label;
+        this.title = `${vendor} - Employee Timesheet`;
     }
 
     openNew() {
@@ -303,8 +288,66 @@ export class AssignedEmployeesComponent implements OnInit {
         );
     }
 
-    back() {
-        const id = this.route.snapshot.params['id'];
-        this.router.navigate([this.type + 's']);
+    exportPdf() {
+        const exportColumns: ColumnInput[] = [
+            {
+                title: 'Id',
+                header: 'Id',
+                dataKey: 'employeeId',
+                key: 'employeeId',
+            },
+            {
+                title: 'Employee Name',
+                header: 'Employee Name',
+                dataKey: 'employeeName',
+                key: 'employeeName',
+            },
+            {
+                title: 'Trade',
+                header: 'Trade',
+                dataKey: 'tradeName',
+                key: 'tradeName',
+            },
+            {
+                title: 'Project',
+                header: 'Project',
+                dataKey: 'projectName',
+                key: 'projectName',
+            },
+            ...this.days.map((d) => ({
+                title: d.toString(),
+                header: d.toString(),
+                dataKey: d.toString(),
+                key: d.toString(),
+            })),
+        ];
+        const days = this.days.map((d) => d.toString());
+        const doc = new jsPDF('l', 'px', 'a3', false);
+        doc.text(this.title, 30, 30);
+        autoTable(doc, {
+            margin: {
+                top: 40,
+            },
+            head: [
+                [
+                    'Id',
+                    'Employee Name',
+                    'Trade',
+                    'Project',
+                    ...days,
+                    'Total Hours',
+                ],
+            ],
+            //columns: exportColumns,
+            body: this.data.map((d) => [
+                d.employeeId,
+                d.employeeName,
+                d.tradeName,
+                d.projectName,
+                ...days.map((dn) => d[dn]),
+                d.total + 'h',
+            ]),
+        });
+        doc.save('timesheet.pdf');
     }
 }

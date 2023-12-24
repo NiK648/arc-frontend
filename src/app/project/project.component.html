@@ -1,87 +1,42 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
+        <div class="card p-3">
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button
-                            pButton
-                            pRipple
-                            label="New"
-                            icon="pi pi-plus"
-                            class="p-button-success mr-2"
-                            (click)="openNew()"
-                        ></button>
-                        <button
-                            pButton
-                            pRipple
-                            label="Delete"
-                            icon="pi pi-trash"
-                            class="p-button-danger"
-                            (click)="deleteSelectedProjects()"
-                            [disabled]="
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedProjects()" [disabled]="
                                 !selectedProjects || !selectedProjects.length
-                            "
-                        ></button>
+                            "></button>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload
-                        mode="basic"
-                        accept="image/*"
-                        [maxFileSize]="1000000"
-                        label="Import"
-                        chooseLabel="Import"
-                        class="mr-2 inline-block"
-                    ></p-fileUpload>
-                    <button
-                        pButton
-                        pRipple
-                        label="Export"
-                        icon="pi pi-upload"
-                        class="p-button-help"
-                        (click)="dt.exportCSV()"
-                    ></button>
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table
-                #dt
-                [value]="projects"
-                [columns]="cols"
-                responsiveLayout="scroll"
-                [rows]="10"
-                [globalFilterFields]="[
+            <p-table #dt [value]="projects" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="[
                     'name',
                     'country.name',
                     'representative.name',
                     'status'
-                ]"
-                [paginator]="true"
-                [rowsPerPageOptions]="[10, 20, 30]"
-                [showCurrentPageReport]="true"
+                ]" [paginator]="true" [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedProjects"
-                selectionMode="multiple"
-                [rowHover]="true"
-                dataKey="id"
-            >
+                [(selection)]="selectedProjects" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
-                    <div
-                        class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
-                    >
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Projects</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input
-                                pInputText
-                                type="text"
-                                (input)="onGlobalFilter(dt, $event)"
-                                placeholder="Search..."
-                                class="w-full sm:w-auto"
-                            />
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
                         </span>
                     </div>
                 </ng-template>
@@ -90,7 +45,7 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="id" style="width: 5%">
+                        <th pSortableColumn="id" style="min-width: 70px;">
                             Id <p-sortIcon field="id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="name" style="width: 20%">
@@ -110,57 +65,47 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-project>
-                    <tr>
+                    <tr class="cursor-pointer" (click)="onSelect(project)">
                         <td>
-                            <p-tableCheckbox
-                                [value]="project"
-                            ></p-tableCheckbox>
+                            <p-tableCheckbox [value]="project"></p-tableCheckbox>
                         </td>
-                        <td style="">
+                        <td>
                             <span class="p-column-title">Id</span>
                             {{ project.id }}
                         </td>
-                        <td style="">
+                        <td>
                             <span class="p-column-title">Name</span>
                             {{ project.name }}
                         </td>
-                        <td style="">
+                        <td>
                             <span class="p-column-title">Client</span>
                             {{ project.clientName }}
                         </td>
-                        <td style="">
+                        <td>
                             <span class="p-column-title">Address</span>
                             {{ project.address }}
                         </td>
-                        <td style="">
+                        <td>
                             <span class="p-column-title">Description</span>
-                            <div
-                                style="
+                            <div style="
                                     max-width: 150px;
                                     overflow: hidden;
                                     white-space: nowrap;
                                     text-overflow: ellipsis;
-                                "
-                            >
+                                ">
                                 {{ project.description }}
                             </div>
                         </td>
                         <td>
                             <div class="flex">
-                                <button
-                                    pButton
-                                    pRipple
-                                    icon="pi pi-pencil"
+                                <button pButton pRipple icon="pi pi-user-plus"
+                                    class="p-button-rounded p-button-help mr-2"
+                                    (click)="$event.stopPropagation(); openLogTime(project)"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
-                                    (click)="editProject(project)"
-                                ></button>
-                                <button
-                                    pButton
-                                    pRipple
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-warning"
-                                    (click)="deleteProject(project)"
-                                ></button>
+                                    (click)="$event.stopPropagation(); editProject(project)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="$event.stopPropagation(); deleteProject(project)"></button>
                             </div>
                         </td>
                     </tr>
@@ -168,154 +113,96 @@
             </p-table>
         </div>
 
-        <p-dialog
-            [(visible)]="projectDialog"
-            [style]="{ width: '450px' }"
-            header="Project Details"
-            [modal]="true"
-            class="p-fluid"
-        >
+        <p-dialog [(visible)]="projectDialog" [style]="{ width: '450px' }" header="Project Details" [modal]="true"
+            class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Name</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="name"
-                        [(ngModel)]="project.name"
-                        required
-                        autofocus
-                        [ngClass]="{
+                    <input type="text" pInputText id="name" [(ngModel)]="project.name" required autofocus [ngClass]="{
                             'ng-invalid ng-dirty': submitted && !project.name
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !project.name"
-                        >Name is required.</small
-                    >
+                        }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !project.name">Name is required.</small>
                 </div>
                 <div class="field">
                     <label for="clientId">Client</label>
-                    <p-dropdown
-                        [(ngModel)]="project.clientId"
-                        inputId="clientId"
-                        [options]="clients"
-                        placeholder="Select Client"
-                        [appendTo]="'body'"
-                    >
+                    <p-dropdown [(ngModel)]="project.clientId" inputId="clientId" [options]="clients"
+                        placeholder="Select Client" [appendTo]="'body'">
                     </p-dropdown>
                 </div>
                 <div class="field">
                     <label for="address">Address</label>
-                    <textarea
-                        id="address"
-                        pInputTextarea
-                        [(ngModel)]="project.address"
-                        required
-                        rows="3"
-                        cols="20"
-                    ></textarea>
+                    <textarea id="address" pInputTextarea [(ngModel)]="project.address" required rows="3"
+                        cols="20"></textarea>
                 </div>
                 <div class="field">
                     <label for="description">Description</label>
-                    <textarea
-                        id="description"
-                        pInputTextarea
-                        [(ngModel)]="project.description"
-                        required
-                        rows="3"
-                        cols="20"
-                    ></textarea>
+                    <textarea id="description" pInputTextarea [(ngModel)]="project.description" required rows="3"
+                        cols="20"></textarea>
                 </div>
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    label="Cancel"
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    (click)="hideDialog()"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    label="Save"
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    (click)="saveProject()"
-                ></button>
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveProject()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog
-            [(visible)]="deleteProjectDialog"
-            header="Confirm"
-            [modal]="true"
-            [style]="{ width: '450px' }"
-        >
+        <p-dialog [(visible)]="deleteProjectDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
-                <i
-                    class="pi pi-exclamation-triangle mr-3"
-                    style="font-size: 2rem"
-                ></i>
-                <span *ngIf="project"
-                    >Are you sure you want to delete <b>{{ project.name }}</b
-                    >?</span
-                >
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="project">Are you sure you want to delete <b>{{ project.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    label="No"
-                    (click)="deleteProjectDialog = false"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    label="Yes"
-                    (click)="confirmDelete()"
-                ></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteProjectDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog
-            [(visible)]="deleteProjectsDialog"
-            header="Confirm"
-            [modal]="true"
-            [style]="{ width: '450px' }"
-        >
+        <p-dialog [(visible)]="deleteProjectsDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
-                <i
-                    class="pi pi-exclamation-triangle mr-3"
-                    style="font-size: 2rem"
-                ></i>
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span>Are you sure you want to delete selected projects?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    label="No"
-                    (click)="deleteProjectsDialog = false"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    label="Yes"
-                    (click)="confirmDeleteSelected()"
-                ></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteProjectsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="logTimeDialog" header="Log Time" [modal]="true"
+            [style]="{ width: '90vw', height: '90vh' }">
+            <div class="flex align-items-center justify-content-center">
+
+                <p-table [value]="pTimeLogs" [tableStyle]="{ width: '85vw' }" [scrollable]="true" scrollHeight="67vh">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Employee</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-log>
+                        <tr>
+                            <td>{{ log.employeeName }}</td>
+                            <td>
+                                <p-calendar [(ngModel)]="log.logDateObj" [showIcon]="true"></p-calendar>
+                            </td>
+                            <td><p-inputMask mask="99h" [(ngModel)]="log.logTime"></p-inputMask></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Save"
+                    (click)="saveTimeLog()"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
+                    (click)="logTimeDialog = false"></button>
             </ng-template>
         </p-dialog>
     </div>

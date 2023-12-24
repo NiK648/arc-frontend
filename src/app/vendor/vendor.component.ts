@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { VendorService } from '../demo/service/vendor.service';
 import { Vendor } from '../demo/api/vendor';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-vendor',
@@ -31,8 +32,10 @@ export class VendorComponent implements OnInit {
 
     constructor(
         private vendorService: VendorService,
-        private messageService: MessageService
-    ) {}
+        private messageService: MessageService,
+        private router: Router,
+        private route: ActivatedRoute,
+    ) { }
 
     ngOnInit() {
         this.vendorService
@@ -174,5 +177,17 @@ export class VendorComponent implements OnInit {
             .catch((error) => {
                 console.error('Failed to download the PDF file: ', error);
             });
+    }
+
+    onSelect(vendor: Vendor) {
+        this.router.navigate([vendor.id, 'employees'], {
+            relativeTo: this.route
+        });
+    }
+
+    viewReport(vendor: Vendor) {
+        this.router.navigate([vendor.id, 'report'], {
+            relativeTo: this.route
+        });
     }
 }

@@ -1,1 +1,280 @@
-<p>assigned-employees works!</p>
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-3">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="" icon="pi pi-arrow-left" class="p-button-secondary mr-2"
+                            (click)="back()"></button>
+                        <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Remove" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedEmployees()" [disabled]="
+                                !selectedEmployees || !selectedEmployees.length
+                            "></button>
+                    </div>
+                </ng-template>
+
+                <!-- <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept=".xls,.xlsx" [maxFileSize]="1000000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
+                </ng-template> -->
+            </p-toolbar>
+
+            <p-table #dt [value]="employees" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['id', 'name', 'phone', 'address']" [paginator]="true"
+                [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [(selection)]="selectedEmployees" selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">{{title}}</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id" style="width: 100px">
+                            Id <p-sortIcon field="id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="firstName" style="width: 250px">
+                            First Name
+                            <p-sortIcon field="firstName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="lastName" style="width: 250px">
+                            Last Name <p-sortIcon field="lastName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email" style="width: 250px">
+                            Email <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="phone" style="width: 250px">
+                            Phone <p-sortIcon field="phone"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="tradeId" style="width: 250px">
+                            Trade <p-sortIcon field="tradeId"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="vendorId" style="width: 250px">
+                            Vendor <p-sortIcon field="vendorId"></p-sortIcon>
+                        </th>
+                        <!-- <th pSortableColumn="projectId" style="width: 250px">
+                            Project <p-sortIcon field="projectId"></p-sortIcon>
+                        </th> -->
+                        <th style="text-align: right">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-employee>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="employee"></p-tableCheckbox>
+                        </td>
+                        <td>
+                            <span class="p-column-title">Id</span>
+                            {{ employee.id }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Name</span>
+                            {{ employee.firstName }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Name</span>
+                            {{ employee.lastName }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Email</span>
+                            {{ employee.email }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Phone</span>
+                            {{ employee.phone }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Trade</span>
+                            {{ employee.tradeName }}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Vendor</span>
+                            {{ employee.vendorName }}
+                        </td>
+                        <!-- <td>
+                            <span class="p-column-title">Project</span>
+                            {{ employee.projectName }}
+                        </td> -->
+                        <td>
+                            <div class="flex justify-content-end">
+                                <button *ngIf="type === 'project'" pButton pRipple icon="pi pi-user-plus"
+                                    class="p-button-rounded p-button-help mr-2"
+                                    (click)="openLogTime(employee)"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="editEmployee(employee)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteEmployee(employee)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="employeeDialog" [style]="{ width: '450px' }" header="Employee Details" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="firstName">First Name</label>
+                    <input type="text" pInputText id="firstName" [(ngModel)]="employee.firstName" required autofocus
+                        [ngClass]="{
+                            'ng-invalid ng-dirty':
+                                submitted && !employee.firstName
+                        }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !employee.firstName">First Name is
+                        required.</small>
+                </div>
+                <div class="field">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" pInputText id="lastName" [(ngModel)]="employee.lastName" required [ngClass]="{
+                            'ng-invalid ng-dirty':
+                                submitted && !employee.lastName
+                        }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !employee.lastName">Last Name is
+                        required.</small>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="text" pInputText id="email" [(ngModel)]="employee.email" [ngClass]="{
+                            'ng-invalid ng-dirty': submitted && !employee.email
+                        }" />
+                </div>
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="phone">Phone</label>
+                        <p-inputMask mask="+999 9999999999" [(ngModel)]="employee.phone"></p-inputMask>
+                    </div>
+                </div>
+                <!-- <div class="field">
+                    <label for="projectId">Project</label>
+                    <p-dropdown
+                        [(ngModel)]="employee.projectId"
+                        inputId="projectId"
+                        [options]="projects"
+                        placeholder="Select Project"
+                        [appendTo]="'body'"
+                    >
+                    </p-dropdown>
+                </div> -->
+                <div class="field">
+                    <label for="employeeType">Type</label>
+                    <p-dropdown [(ngModel)]="employee.type" inputId="employeeType" [options]="typeOptions"
+                        placeholder="Select Type" [appendTo]="'body'">
+                    </p-dropdown>
+                </div>
+                <div class="field" *ngIf="employee.type === 2">
+                    <label for="vendorId">Vendor</label>
+                    <p-dropdown [(ngModel)]="employee.vendorId" inputId="vendorId" [options]="vendors" [filter]="true"
+                        placeholder="Select Vendor" [appendTo]="'body'">
+                    </p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="tradeId">Trade</label>
+                    <p-dropdown [(ngModel)]="employee.tradeId" inputId="tradeId" [options]="trades" [filter]="true"
+                        placeholder="Select Trade" [appendTo]="'body'">
+                    </p-dropdown>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveEmployee()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteEmployeeDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="employee">Are you sure you want to remove <b>{{ employee.firstName + ' ' +
+                        employee.lastName }}</b> from this {{ type ===
+                    'project' ? 'project' :
+                    'vendor'}}?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteEmployeeDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteEmployeesDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to remove selected employees from this {{ type === 'project' ? 'project' :
+                    'vendor'}}?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteEmployeesDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="logTimeDialog" [style]="{ width: '450px' }" header="Log Time" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="email">Date</label>
+                    <p-calendar [(ngModel)]="logTimeModel.logDate" [appendTo]="'body'" [iconDisplay]="'input'"
+                        [showIcon]="true" [minDate]="currentDate"></p-calendar>
+                </div>
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="phone">Time</label>
+                        <p-inputMask mask="99h" [(ngModel)]="logTimeModel.logTime"></p-inputMask>
+                    </div>
+                </div>
+                <!-- <div class="field">
+                    <label for="projectId">Project</label>
+                    <p-dropdown
+                        [(ngModel)]="employee.projectId"
+                        inputId="projectId"
+                        [options]="projects"
+                        placeholder="Select Project"
+                        [appendTo]="'body'"
+                        [disabled]="true"
+                    >
+                    </p-dropdown>
+                </div> -->
+                <!-- <div class="field">
+                    <label for="vendorId">Vendor</label>
+                    <p-dropdown [(ngModel)]="employee.vendorId" inputId="vendorId" [options]="vendors"
+                        placeholder="Select Vendor" [appendTo]="'body'" [disabled]="true">
+                    </p-dropdown>
+                </div> -->
+                <div class="field">
+                    <label for="tradeId">Trade</label>
+                    <p-dropdown [(ngModel)]="employee.tradeId" inputId="tradeId" [options]="trades"
+                        placeholder="Select Trade" [appendTo]="'body'" [disabled]="true">
+                    </p-dropdown>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideLogTimeDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="logTime()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

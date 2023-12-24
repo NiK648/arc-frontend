@@ -19,9 +19,12 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { VendorEmployeesComponent } from './vendor-employees/vendor-employees.component';
+import { AssignedEmployeesComponent } from '../assigned-employees/assigned-employees.component';
+import { ReportComponent } from './report/report.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
-    declarations: [VendorComponent, VendorEmployeesComponent],
+    declarations: [VendorComponent, VendorEmployeesComponent, ReportComponent],
     imports: [
         CommonModule,
         TableModule,
@@ -39,7 +42,9 @@ import { VendorEmployeesComponent } from './vendor-employees/vendor-employees.co
         InputNumberModule,
         DialogModule,
         InputMaskModule,
+        TooltipModule,
         VendorRoutingModule,
+        AssignedEmployeesComponent,
     ],
 })
 export class VendorModule {}

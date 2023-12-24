@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageService, SelectItem } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { EmployeeService } from '../demo/service/employee.service';
-import { Employee } from '../demo/api/employee';
+import { Employee, EmployeeType } from '../demo/api/employee';
 import { TradeService } from '../demo/service/trade.service';
 import { VendorService } from '../demo/service/vendor.service';
 import { ProjectService } from '../demo/service/project.service';
@@ -48,13 +48,21 @@ export class EmployeeComponent implements OnInit {
 
     currentDate = new Date();
 
+    typeOptions: SelectItem[] = [{
+        label: 'Internal',
+        value: EmployeeType.Internal,
+    }, {
+        label: 'External',
+        value: EmployeeType.External,
+    }];
+
     constructor(
         private employeeService: EmployeeService,
         private projectService: ProjectService,
         private vendorService: VendorService,
         private tradeService: TradeService,
         private messageService: MessageService
-    ) {}
+    ) { }
 
     async ngOnInit() {
         this.trades = (await firstValueFrom(this.tradeService.getTrades())).map(

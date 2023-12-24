@@ -1,34 +1,21 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
+        <div class="card p-3">
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button
-                            pButton
-                            pRipple
-                            label="New"
-                            icon="pi pi-plus"
-                            class="p-button-success mr-2"
-                            (click)="openNew()"
-                        ></button>
-                        <button
-                            pButton
-                            pRipple
-                            label="Delete"
-                            icon="pi pi-trash"
-                            class="p-button-danger"
-                            (click)="deleteSelectedVendors()"
-                            [disabled]="
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedVendors()" [disabled]="
                                 !selectedVendors || !selectedVendors.length
-                            "
-                        ></button>
+                            "></button>
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload
+                    <!-- <p-fileUpload
                         mode="basic"
                         accept=".xls,.xlsx"
                         [maxFileSize]="1000000"
@@ -44,40 +31,24 @@
                         class="p-button-help"
                         [disabled]="!selectedVendors || !selectedVendors.length"
                         (click)="export()"
-                    ></button>
+                    ></button> -->
+                    <!-- <button pButton pRipple label="View Report" icon="pi pi-chart-line" class="p-button-help"
+                        (click)="viewReport()"></button> -->
                 </ng-template>
             </p-toolbar>
 
-            <p-table
-                #dt
-                [value]="vendors"
-                [columns]="cols"
-                responsiveLayout="scroll"
-                [rows]="10"
-                [globalFilterFields]="['id', 'name', 'phone', 'address']"
-                [paginator]="true"
-                [rowsPerPageOptions]="[10, 20, 30]"
-                [showCurrentPageReport]="true"
+            <p-table #dt [value]="vendors" [columns]="cols" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['id', 'name', 'phone', 'address']" [paginator]="true"
+                [rowsPerPageOptions]="[10, 20, 30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [(selection)]="selectedVendors"
-                selectionMode="multiple"
-                [rowHover]="true"
-                dataKey="id"
-            >
+                [(selection)]="selectedVendors" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
-                    <div
-                        class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
-                    >
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Vendors</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
-                            <input
-                                pInputText
-                                type="text"
-                                (input)="onGlobalFilter(dt, $event)"
-                                placeholder="Search..."
-                                class="w-full sm:w-auto"
-                            />
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
                         </span>
                     </div>
                 </ng-template>
@@ -102,7 +73,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-vendor>
-                    <tr>
+                    <tr class="cursor-pointer" (click)="onSelect(vendor)">
                         <td>
                             <p-tableCheckbox [value]="vendor"></p-tableCheckbox>
                         </td>
@@ -124,20 +95,13 @@
                         </td>
                         <td>
                             <div class="flex justify-content-end">
-                                <button
-                                    pButton
-                                    pRipple
-                                    icon="pi pi-pencil"
+                                <button pButton pRipple icon="pi pi-chart-line" pTooltip="View Report"
+                                    class="p-button-rounded p-button-help mr-2" (click)="viewReport(vendor)"></button>
+                                <button pButton pRipple icon="pi pi-pencil"
                                     class="p-button-rounded p-button-success mr-2"
-                                    (click)="editVendor(vendor)"
-                                ></button>
-                                <button
-                                    pButton
-                                    pRipple
-                                    icon="pi pi-trash"
-                                    class="p-button-rounded p-button-warning"
-                                    (click)="deleteVendor(vendor)"
-                                ></button>
+                                    (click)="editVendor(vendor)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteVendor(vendor)"></button>
                             </div>
                         </td>
                     </tr>
@@ -145,141 +109,60 @@
             </p-table>
         </div>
 
-        <p-dialog
-            [(visible)]="vendorDialog"
-            [style]="{ width: '450px' }"
-            header="Vendor Details"
-            [modal]="true"
-            class="p-fluid"
-        >
+        <p-dialog [(visible)]="vendorDialog" [style]="{ width: '450px' }" header="Vendor Details" [modal]="true"
+            class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Name</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="name"
-                        [(ngModel)]="vendor.name"
-                        required
-                        autofocus
-                        [ngClass]="{
+                    <input type="text" pInputText id="name" [(ngModel)]="vendor.name" required autofocus [ngClass]="{
                             'ng-invalid ng-dirty': submitted && !vendor.name
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !vendor.name"
-                        >Name is required.</small
-                    >
+                        }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !vendor.name">Name is required.</small>
                 </div>
                 <div class="formgrid grid">
                     <div class="field col">
                         <label for="phone">Phone</label>
-                        <p-inputMask
-                            mask="(99) 999 9999"
-                            [(ngModel)]="vendor.phone"
-                        ></p-inputMask>
+                        <p-inputMask mask="(99) 999 9999" [(ngModel)]="vendor.phone"></p-inputMask>
                     </div>
                 </div>
                 <div class="field">
                     <label for="address">Address</label>
-                    <textarea
-                        id="address"
-                        pInputTextarea
-                        [(ngModel)]="vendor.address"
-                        required
-                        rows="3"
-                        cols="20"
-                    ></textarea>
+                    <textarea id="address" pInputTextarea [(ngModel)]="vendor.address" required rows="3"
+                        cols="20"></textarea>
                 </div>
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    label="Cancel"
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    (click)="hideDialog()"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    label="Save"
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    (click)="saveVendor()"
-                ></button>
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="saveVendor()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog
-            [(visible)]="deleteVendorDialog"
-            header="Confirm"
-            [modal]="true"
-            [style]="{ width: '450px' }"
-        >
+        <p-dialog [(visible)]="deleteVendorDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
-                <i
-                    class="pi pi-exclamation-triangle mr-3"
-                    style="font-size: 2rem"
-                ></i>
-                <span *ngIf="vendor"
-                    >Are you sure you want to delete <b>{{ vendor.name }}</b
-                    >?</span
-                >
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="vendor">Are you sure you want to delete <b>{{ vendor.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    label="No"
-                    (click)="deleteVendorDialog = false"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    label="Yes"
-                    (click)="confirmDelete()"
-                ></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteVendorDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
-        <p-dialog
-            [(visible)]="deleteVendorsDialog"
-            header="Confirm"
-            [modal]="true"
-            [style]="{ width: '450px' }"
-        >
+        <p-dialog [(visible)]="deleteVendorsDialog" header="Confirm" [modal]="true" [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
-                <i
-                    class="pi pi-exclamation-triangle mr-3"
-                    style="font-size: 2rem"
-                ></i>
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span>Are you sure you want to delete selected vendors?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    label="No"
-                    (click)="deleteVendorsDialog = false"
-                ></button>
-                <button
-                    pButton
-                    pRipple
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    label="Yes"
-                    (click)="confirmDeleteSelected()"
-                ></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteVendorsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
     </div>
