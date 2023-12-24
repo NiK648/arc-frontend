@@ -44,6 +44,8 @@ export class ProjectComponent implements OnInit {
 
     pTimeLogs: TimeLog[] = [];
 
+    public today = new Date();
+
     constructor(
         private projectService: ProjectService,
         private clientService: ClientService,

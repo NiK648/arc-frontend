@@ -5,19 +5,25 @@ import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TimeLogService {
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) {}
 
     public getTimeLogs() {
-        return this.httpClient.get<TimeLog[]>('assets/demo/data/time-log.json').pipe(map(res => {
-            res.forEach(t => {
-                t.logDateObj = new Date(t.logDate);
-            });
-            return res;
-        }));
+        return this.httpClient
+            .get<TimeLog[]>('assets/demo/data/time-log.json')
+            .pipe(
+                map((res) => {
+                    res.forEach((t) => {
+                        t.logDateObj = new Date(t.logDate);
+                        t.logTimeNumber = t.logTime.replace('h', '');
+                    });
+                    return res;
+                })
+            );
     }
 
     public getVendorTimeLogs() {
-        return this.httpClient.get<any[]>('assets/demo/data/vendor-report.json');
+        return this.httpClient.get<any[]>(
+            'assets/demo/data/vendor-report.json'
+        );
     }
-
 }

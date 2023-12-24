@@ -126,10 +126,10 @@
             </p-table>
         </div>
 
-        <p-dialog [(visible)]="employeeDialog" [style]="{ width: '450px' }" header="Employee Details" [modal]="true"
+        <p-dialog [(visible)]="employeeDialog" [style]="{ width: '450px' }" header="Add Employees" [modal]="true"
             class="p-fluid">
             <ng-template pTemplate="content">
-                <div class="field">
+                <!-- <div class="field">
                     <label for="firstName">First Name</label>
                     <input type="text" pInputText id="firstName" [(ngModel)]="employee.firstName" required autofocus
                         [ngClass]="{
@@ -159,7 +159,7 @@
                         <label for="phone">Phone</label>
                         <p-inputMask mask="+999 9999999999" [(ngModel)]="employee.phone"></p-inputMask>
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="field">
                     <label for="projectId">Project</label>
                     <p-dropdown
@@ -171,7 +171,7 @@
                     >
                     </p-dropdown>
                 </div> -->
-                <div class="field">
+                <!-- <div class="field">
                     <label for="employeeType">Type</label>
                     <p-dropdown [(ngModel)]="employee.type" inputId="employeeType" [options]="typeOptions"
                         placeholder="Select Type" [appendTo]="'body'">
@@ -182,20 +182,26 @@
                     <p-dropdown [(ngModel)]="employee.vendorId" inputId="vendorId" [options]="vendors" [filter]="true"
                         placeholder="Select Vendor" [appendTo]="'body'">
                     </p-dropdown>
-                </div>
-                <div class="field">
+                </div> -->
+                <!-- <div class="field">
                     <label for="tradeId">Trade</label>
                     <p-dropdown [(ngModel)]="employee.tradeId" inputId="tradeId" [options]="trades" [filter]="true"
                         placeholder="Select Trade" [appendTo]="'body'">
                     </p-dropdown>
+                </div> -->
+                <div class="field">
+                    <label for="tradeId">Employees</label>
+                    <p-multiSelect [(ngModel)]="employeesToAdd" inputId="tradeId" [options]="notAddedItems" [filter]="true"
+                        placeholder="Select Employees" [appendTo]="'body'" [optionLabel]="'name'" [optionValue]="'id'">
+                    </p-multiSelect>
                 </div>
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
                     (click)="hideDialog()"></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
-                    (click)="saveEmployee()"></button>
+                <button pButton pRipple label="Add" icon="pi pi-check" class="p-button-text"
+                    (click)="addEmployees()"></button>
             </ng-template>
         </p-dialog>
 

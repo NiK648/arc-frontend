@@ -134,11 +134,7 @@
                     <textarea id="address" pInputTextarea [(ngModel)]="project.address" required rows="3"
                         cols="20"></textarea>
                 </div>
-                <div class="field">
-                    <label for="description">Description</label>
-                    <textarea id="description" pInputTextarea [(ngModel)]="project.description" required rows="3"
-                        cols="20"></textarea>
-                </div>
+
             </ng-template>
 
             <ng-template pTemplate="footer">
@@ -177,23 +173,29 @@
 
         <p-dialog [(visible)]="logTimeDialog" header="Log Time" [modal]="true"
             [style]="{ width: '90vw', height: '90vh' }">
-            <div class="flex align-items-center justify-content-center">
+            <div class="flex align-items-center flex-wrap justify-content-center">
+                <div class="mt-2 mb-2 w-100">
+                    <div class="field flex align-items-center gap-3">
+                        <label class="mb-0">Log Date</label>
+                        <p-calendar [(ngModel)]="today" [showIcon]="true"></p-calendar>
+                    </div>
 
-                <p-table [value]="pTimeLogs" [tableStyle]="{ width: '85vw' }" [scrollable]="true" scrollHeight="67vh">
+                </div>
+                <p-table [value]="pTimeLogs" [tableStyle]="{ width: '85vw' }" [scrollable]="true" scrollHeight="57vh">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Employee</th>
-                            <th>Date</th>
+                            <!-- <th>Date</th> -->
                             <th>Time</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-log>
                         <tr>
                             <td>{{ log.employeeName }}</td>
-                            <td>
+                            <!-- <td>
                                 <p-calendar [(ngModel)]="log.logDateObj" [showIcon]="true"></p-calendar>
-                            </td>
-                            <td><p-inputMask mask="99h" [(ngModel)]="log.logTime"></p-inputMask></td>
+                            </td> -->
+                            <td><input type="number" class="p-2" [(ngModel)]="log.logTimeNumber" min="0" max="24">h</td>
                         </tr>
                     </ng-template>
                 </p-table>

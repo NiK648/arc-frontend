@@ -6,5 +6,6 @@ export interface TimeLog {
     projectName: string;
     logDate: string;
     logDateObj: Date;
+    logTimeNumber: string;
     logTime: string;
 }
